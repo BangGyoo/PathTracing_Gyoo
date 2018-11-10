@@ -1,3 +1,7 @@
+#ifdef GPU_KERNEL
+printf("where is");
+#endif
+
 #define swap(a,b) {float temp; temp = a; a = b; b = temp; }
 
 typedef struct _tri {
