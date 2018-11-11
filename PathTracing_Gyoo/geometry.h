@@ -1,7 +1,6 @@
 
 #define DEBUG
 
-
 #ifndef GPU_KERNEL			// 최초 cl 코드 앞에 선언 할 definition
 #include <math.h>
 #endif
@@ -12,6 +11,7 @@
 
 
 ///////////////////// data structure ////////////////////////////////
+#define PI 3.1415926535
 
 typedef struct _Point {
 	float x;
@@ -32,7 +32,7 @@ Point InitPoint(float x, float y, float z) {
 
 
 
-union Mat4 {	// 마지막 v[3]인자는 항상 v(0,0,0,1) 로!!
+union Mat4 {	// init는 무조건 Gen_Identity_Mat
 	Vec3 v[4];			// union은 선언 순서에 따라 최초 필요 정의 순서도 바뀐다.
 	float e[4][4];		// ex float[4][4]가 먼저 오면 정의때도 float 먼저 써야한다.
 						// 그리고 항상 초기화 해줘야한다.
@@ -69,6 +69,13 @@ Mat4 Generator2(float arg) {
 					0,  0, arg, 0,
 					0,  0,  0, arg };
 	return result;
+}
+std::string Display_Mat4(Mat4 m) {
+	return std::string(std::to_string(m.e[0][0]) + " , " + std::to_string(m.e[0][1]) + " , " + std::to_string(m.e[0][2]) + " , " + std::to_string(m.e[0][3]) + "\n"+
+		std::to_string(m.e[1][0]) + " , " + std::to_string(m.e[1][1]) + " , " + std::to_string(m.e[1][2]) + " , " + std::to_string(m.e[1][3]) +"\n"+
+		std::to_string(m.e[2][0]) + " , " + std::to_string(m.e[2][1]) + " , " + std::to_string(m.e[2][2]) + " , " + std::to_string(m.e[2][3]) +"\n"+
+		std::to_string(m.e[3][0]) + " , " + std::to_string(m.e[3][1]) + " , " + std::to_string(m.e[3][2]) + " , " + std::to_string(m.e[3][3]) +"\n"
+	);
 }
 #endif 
 
@@ -162,3 +169,31 @@ Mat4 Scale(Mat4 m, Vec3 v) {
 }
 
 /*rotate 부터 만들자 x,y,z 축으로 따로따로 만들어줘야할 듯하다.*/
+
+Mat4 Rotate_x(float a) {			// angle is radian value
+	Mat4 m = { 0.0f , };
+	m.v[0] = { 1    ,0     ,0    ,0 };
+	m.v[1] = { 0, cos(a), sin(a) ,0 };
+	m.v[2] = { 0,-sin(a), cos(a) ,0 };
+	m.v[3] = { 0    ,0     ,0    ,1 };
+
+	return m;
+}
+Mat4 Rotate_y(float a) {			// angle is radian value
+	Mat4 m = { 0.0f , };
+	m.v[0] = {cos(a),0  ,-sin(a) ,0 };
+	m.v[1] = { 0,   1   ,   0    ,0 };
+	m.v[2] = {sin(a),0  , cos(a) ,0 };
+	m.v[3] = { 0    ,0     ,0    ,1 };
+
+	return m;
+}
+Mat4 Rotate_z(float a) {			// angle is radian value
+	Mat4 m = { 0.0f , };
+	m.v[0] = { cos(a), sin(a) ,0, 0 };
+	m.v[1] = {-sin(a), cos(a), 0, 0 };
+	m.v[2] = {  0       ,0    ,1, 0 };
+	m.v[3] = {  0       ,0    ,0 ,1 };
+
+	return m;
+}

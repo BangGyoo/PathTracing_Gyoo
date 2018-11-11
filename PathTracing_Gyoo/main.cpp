@@ -5,9 +5,13 @@
 #include "geometry.h"
 
 int main() {
-	glm::vec3 x(0.5f);
+	Vec3 x = { 0.5,0.5,0.5,1.0f };
 	
-	std::cout << glm::to_string(glm::scale(glm::mat4(1.0f),x)) << std::endl;
+	Mat4 m = Gen_Identity_Mat(1.0f);
+	std::cout<<  Display_Mat4(Rotate_x(30.0f*PI/180.0f));
+	//std::cout << Display_Mat4(Translate(m,x));
+
+	//std::cout << glm::to_string(glm::rotate(glm::mat4(1.0f),0.25,x) << std::endl;
 
 	system("pause");
 	return 0;
